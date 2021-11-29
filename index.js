@@ -20,10 +20,10 @@ function start(client) {
   //Ta dando erro, não sei o que é
   client.onGlobalParticipantsChanged(async (participantChangedEvent) => {
     if(participantChangedEvent.action === 'add')
-      await client.sendTextWithMentions(participantChangedEvent.chat,`entrou`);
+      await client.sendTextWithMentions(participantChangedEvent.chat,`Entrou pro bacanal`);
 
     if(participantChangedEvent.action === 'remove')
-      await client.sendTextWithMentions(participantChangedEvent.chat,`saiu`);
+      await client.sendTextWithMentions(participantChangedEvent.chat,`Foi dar uma mamada`);
   });
   client.onMessage(async message => {
     if(message.body.toLowerCase() == 'qual a boa' || message.body.toLowerCase() == 'qual a boa?'){
@@ -38,6 +38,7 @@ function start(client) {
           #putinho - vence uma discussão
           #random - putaria aleatoria
           O resto aqui é auto explicativo, se não for eu também não sei o que é.
+          #vaginas
           #anal
           #cuzinho
           #peitos
@@ -65,11 +66,27 @@ function start(client) {
         case '#random':
           const RandomHub = require('random-hub').RandomHub;
           const hub = new RandomHub();
-          await client.sendVideoAsGif(message.from,hub.getRandomHub(),'some file.mp4', `Porra de whats buga gif`);
+          await client.sendImageAsSticker(message.from,hub.getRandomHub()).then((result) => {
+            console.log('Result: ',result); //return object success
+          })
+          .catch((erro) => {
+            client.sendText(message.from, 'Veio um gif grande demais, tenta de novo.'); //return object error
+          });
         break;
         case '#vaginas':
           let image1 = await nsfw.pussy();
           await client.sendVideoAsGif(message.from,image1,'some file.mp4', ``);
+        break;
+        case '#gif':
+          let image2 = await nsfw.pgif()
+
+          await client.sendImageAsSticker(message.from,image2)
+          .then((result) => {
+            console.log('Result: ',result); //return object success
+          })
+          .catch((erro) => {
+            client.sendText(message.from, 'Veio um gif grande demais, tenta de novo.'); //return object error
+          });
         break;
         case '#anal':
           let image3 = await nsfw.anal();
@@ -90,6 +107,9 @@ function start(client) {
         case '#sensual':
           let image9 = await nsfw.lewd();
           await client.sendVideoAsGif(message.from,image9,'some file.mp4', ``);
+        break;
+        case '#porco':
+          await client.sendText(message.from,'Wess chei das AIDS');
         break;
         default:
           await client.reply(message.from, 'Quié Zé ?!', message.id);
